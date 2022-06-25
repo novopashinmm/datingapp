@@ -6,9 +6,9 @@ import {
   HttpInterceptor
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { NavigationExtras, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { catchError } from 'rxjs/operators';
+import { NavigationExtras, Router } from '@angular/router';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -29,12 +29,14 @@ export class ErrorInterceptor implements HttpInterceptor {
                   }
                 }
                 throw modalStateErrors;
+              }else if(typeof(error.error) === 'object'){
+                this.toastr.error(error.statusText === "OK" ? "Bad Request" : error.statusText, error.status);
               } else {
-                this.toastr.error(error.statusText, error.status);
+                this.toastr.error(error.error, error.status);
               }
               break;
             case 401:
-              this.toastr.error(error.statusText, error.status);
+              this.toastr.error(error.statusText === "OK" ? "Unauthorized" : error.statusText, error.status);
               break;
             case 404:
               this.router.navigateByUrl('/not-found');
