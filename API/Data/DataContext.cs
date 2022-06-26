@@ -1,3 +1,4 @@
+using System;
 using API.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,5 +11,8 @@ namespace API.Data
         }
 
         public DbSet<AppUser> Users { get; set; }
+        
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+            => optionsBuilder.LogTo(Console.WriteLine);
     }
 }
